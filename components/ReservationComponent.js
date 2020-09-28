@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, TouchableOpacity, Modal } from 'react-native';
 import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
@@ -14,7 +14,8 @@ class Reservation extends Component {
           smoking: false,
           date: new Date(),
           show: false,
-          mode: 'date'
+          mode: 'date',
+          showModal: false
         }
     }
 
@@ -22,14 +23,23 @@ class Reservation extends Component {
         title: 'Reserve Table',
     };
 
+    toggleModal() {
+        this.setState({showModal: !this.state.showModal});
+    }
+
     handleReservation() {
         console.log(JSON.stringify(this.state));
+        this.toggleModal();
+    }
+
+    resetForm() {
         this.setState({
-          guests: 1,
-          smoking: false,
-          date: new Date(),
-          show: false,
-          mode: 'date'
+            guests: 1,
+            smoking: false,
+            date: new Date(),
+            show: false,
+            mode: 'date',
+            showModal: false
         });
     }
 
@@ -62,13 +72,13 @@ class Reservation extends Component {
                 <View style={styles.formRow}>
                       <Text style={styles.formLabel}>Date and Time</Text>
                       <TouchableOpacity style={styles.formItem}
-                            style={{
-                                padding: 7,
-                                borderColor: '#512DA8',
-                                borderWidth: 2,
-                                flexDirection: "row"
-                            }}
-                            onPress={() => this.setState({ show: true, mode: 'date' })}
+                        style={{
+                            padding: 7,
+                            borderColor: '#512DA8',
+                            borderWidth: 2,
+                            flexDirection: "row"
+                        }}
+                        onPress={() => this.setState({ show: true, mode: 'date' })}
                       >
                           <Icon type='font-awesome' name='calendar' color='#512DA8' />
                           <Text >
@@ -105,6 +115,24 @@ class Reservation extends Component {
                       accessibilityLabel="Learn more about this purple button"
                       />
                   </View>
+                  <Modal animationType = {"slide"} transparent = {false}
+                      visible = {this.state.showModal}
+                      onDismiss = {() => { this.toggleModal() }}
+                      onRequestClose = {() => { this.toggleModal(); this.resetForm() }}
+                    >
+                      <View style = {styles.modal}>
+                          <Text style = {styles.modalTitle}>Your Reservation</Text>
+                          <Text style = {styles.modalText}>Number of Guests: {this.state.guests}</Text>
+                          <Text style = {styles.modalText}>Smoking?: {this.state.smoking ? 'Yes' : 'No'}</Text>
+                          <Text style = {styles.modalText}>Date and Time: {this.state.date.toISOString()}</Text>
+
+                          <Button
+                              onPress = {() =>{this.toggleModal(); this.resetForm();}}
+                              color="#512DA8"
+                              title="Close"
+                              />
+                      </View>
+                  </Modal>
             </ScrollView>
         );
     }
@@ -125,6 +153,22 @@ const styles = StyleSheet.create({
     },
     formItem: {
         flex: 1
+    },
+    modal: {
+       justifyContent: 'center',
+       margin: 20
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: '#512DA8',
+        textAlign: 'center',
+        color: 'white',
+        marginBottom: 20
+    },
+    modalText: {
+        fontSize: 18,
+        margin: 10
     }
 });
 
