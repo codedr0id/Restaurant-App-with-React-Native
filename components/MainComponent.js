@@ -5,6 +5,7 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 import { View, Platform, Text, ScrollView, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -106,8 +107,25 @@ const AboutNavigator = createStackNavigator(
         color= 'white'
         onPress={ () => navigation.toggleDrawer() } />
     })
-  }
-);
+  });
+
+  const FavoritesNavigator = createStackNavigator({
+    Favorites: { screen: Favorites }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: "#512DA8"
+      },
+      headerTitleStyle: {
+        color: "#fff"
+      },
+      headerTintColor: "#fff",
+      headerLeft: <Icon name="menu" size={24}
+      iconStyle={{ color: 'white' }}
+      onPress={ () => navigation.toggleDrawer() } />
+  })
+});
 
 const ReservationNavigator = createStackNavigator({
   Reservation: { screen: Reservation }
@@ -203,6 +221,21 @@ const MainNavigator = createDrawerNavigator(
               size={24}
               color={tintColor}
             />
+          ),
+        }
+      },
+    Favorites:
+      { screen: FavoritesNavigator,
+        navigationOptions: {
+          title: 'My Favorites',
+          drawerLabel: 'My Favorites',
+          drawerIcon: ({ tintColor, focused }) => (
+            <Icon
+              name='heart'
+              type='font-awesome'
+              size={24}
+              iconStyle={{ color: tintColor }}
+              />
           ),
         }
       },
