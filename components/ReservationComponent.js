@@ -118,7 +118,7 @@ class Reservation extends Component {
                   <Modal animationType = {"slide"} transparent = {false}
                       visible = {this.state.showModal}
                       onDismiss = {() => { this.toggleModal() }}
-                      onRequestClose = {() => { this.toggleModal(); this.resetForm() }}
+                      onRequestClose = {() => { this.toggleModal() }}
                     >
                       <View style = {styles.modal}>
                           <Text style = {styles.modalTitle}>Your Reservation</Text>
