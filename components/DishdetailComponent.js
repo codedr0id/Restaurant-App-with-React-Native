@@ -23,10 +23,17 @@ const mapDispatchToProps = dispatch => ({
 function RenderDish(props) {
     const dish = props.dish;
 
-    handleViewRef = (ref) => this.view = ref;
+    handleViewRef = ref => this.view = ref
 
-    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+    const recognizeDrag = ({ dx }) => {
         if ( dx < -200 )
+            return true;
+        else
+            return false;
+    }
+
+    const recognizeComment = ({ dx }) => {
+        if ( dx > 200 )
             return true;
         else
             return false;
@@ -41,7 +48,7 @@ function RenderDish(props) {
 
         onPanResponderEnd: (e, gestureState) => {
             console.log("pan responder end", gestureState);
-            if (recognizeDrag(gestureState))
+            if (recognizeDrag(gestureState)) {
                 Alert.alert(
                     'Add Favorite',
                     'Are you sure you wish to add ' + dish.name + ' to favorite?',
@@ -51,6 +58,10 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 );
+              }
+            else if (recognizeComment(gestureState)) {
+              props.onSelect();
+            }
 
             return true;
         }
@@ -82,7 +93,7 @@ function RenderDish(props) {
                           name={ 'pencil' }
                           type='font-awesome'
                           color='#528'
-                          onPress={ props.modal }
+                          onPress={() => props.onSelect()}
                           />
                     </View>
                 </Card>
@@ -175,7 +186,7 @@ class DishDetail extends Component {
               <RenderDish dish={this.props.dishes.dishes[+dishId]}
                   favorite={this.props.favorites.some(el => el === dishId)}
                   onPress={() => this.markFavorite(dishId)}
-                  modal={this.toggleModal}
+                  onSelect={() => this.toggleModal()}
                   />
               <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
               <Modal animationType = {"slide"} transparent = {false}
