@@ -2,13 +2,12 @@
   "expo": {
     "sdkVersion": "39.0.0",
     "name": "confusion",
+    "icon": "./assets/images/icon.png",
     "version": "1.0.0",
     "slug": "confusion",
-    "ios": {
-      "bundleIdentifier": "net.food.confusion.confusion"
-    },
     "android": {
-      "package": "net.food.confusion.confusion"
+      "package": "net.food.confusion.confusion",
+      "versionCode": 1
     }
   }
 }

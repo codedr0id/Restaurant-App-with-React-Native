@@ -317,7 +317,7 @@ class Main extends Component {
     NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
   }
 
-  componentWillUnmount() {
+  componentDidUnmount() {
     NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange);
   }
 
