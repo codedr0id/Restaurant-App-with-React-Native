@@ -65,19 +65,31 @@ class Reservation extends Component {
     }
 
     async addReservationToCalendar(date) {
+        console.log(new Date(Date.parse(date)));
+        console.log(date);
         await this.obtainCalendarPermission();
+        const defaultCalendarSource = Platform.OS === 'ios' ? await getDefaultCalendarSource() : { isLocalAccount: true, name: 'Expo Calendar' };
 
-        let dateMs = Date.parse(date);
-        let startDate = new Date(dateMs);
-        let endDate = new Date(dateMs + 2 * 60 * 60 * 1000);
-
-        Calendar.createEventAsync(null, {
+        const calendarId = await Calendar.createCalendarAsync({
             title: 'Con Fusion Table Reservation',
-            startDate: startDate,
-            endDate: endDate,
+            source: defaultCalendarSource,
+            name: 'internalCalendarName',
+            color: 'blue',
+            entityType: Calendar.EntityTypes.EVENT,
+            sourceId: defaultCalendarSource.id,
+            ownerAccount: 'personal',
+            accessLevel: Calendar.CalendarAccessLevel.OWNER
+        });
+
+        await Calendar.createEventAsync(calendarId, {
+            title: 'Con Fusion Table Reservation',
+            startDate: new Date(Date.parse(date)),
+            endDate: new Date(Date.parse(date) + 2 * 60 * 60 * 1000),
             timeZone: 'Asia/Hong_Kong',
             location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+
         });
+
     }
 
     handleReservation() {
